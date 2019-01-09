@@ -5,18 +5,23 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/**
- * Created by tino on 12/1/18.
- */
+import java.util.Date;
 
+/**
+ * Created by tino on 1/8/19.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserListVo {
+public class CouponListVo {
     private Integer id;
-    private String username;
-    private String email;
-    private String phone;
+
+    private Integer userId;
+
+    private Integer status;
+
+    private String discount;
+
     private String createTime;
 }

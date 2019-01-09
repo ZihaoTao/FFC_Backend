@@ -86,4 +86,25 @@ public class UserServiceImpl implements IUserService {
         return ServerResponse.createBySuccessMessage("Successfully verified");
     }
 
+    @Override
+    public ServerResponse<User> updateInformation(User user){
+        int resultCount = userMapper.checkEmailByUserId(user.getEmail(),user.getId());
+        if(resultCount > 0){
+            return ServerResponse.createByErrorMessage("email exists, please change the email");
+        }
+        User updateUser = new User();
+        updateUser.setId(user.getId());
+        updateUser.setEmail(user.getEmail());
+        updateUser.setPhone(user.getPhone());
+        updateUser.setQuestion(user.getQuestion());
+        updateUser.setAnswer(user.getAnswer());
+        updateUser.setFirstTimeGetCoupon(user.getFirstTimeGetCoupon());
+
+        int updateCount = userMapper.updateByPrimaryKeySelective(updateUser);
+        if(updateCount > 0){
+            return ServerResponse.createBySuccess("Information has been updated successfully",updateUser);
+        }
+        return ServerResponse.createByErrorMessage("Information reset failed");
+    }
+
 }
