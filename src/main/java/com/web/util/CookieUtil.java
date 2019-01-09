@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Slf4j
 public class CookieUtil {
-    private final static String COOKIE_DOMAIN = ".taozihao.xyz";
+    private final static String COOKIE_DOMAIN = ".fashionforconservation.xyz";
     private final static String COOKIE_NAME = "FFC_login_token";
     private final static String CHECK = "FFC_CHECK";
 
