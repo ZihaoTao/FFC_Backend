@@ -77,7 +77,7 @@ public class CouponController {
         String userJsonStr = RedisShardedPoolUtil.get(loginToken);
         User currentUser = JsonUtil.String2Obj(userJsonStr, User.class);
         if(currentUser != null){
-            return iCouponService.getCouponList(pageNum, pageSize);
+            return iCouponService.getCouponList(currentUser.getId(), pageNum, pageSize);
         }
         return ServerResponse.createByErrorMessage("Need to login");
     }

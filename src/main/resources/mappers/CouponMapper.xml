@@ -104,9 +104,10 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  <select id="selectList" resultMap="BaseResultMap" >
+  <select id="selectListByUserId" resultMap="BaseResultMap" parameterType="int">
     SELECT
     <include refid="Base_Column_List"/>
     from coupons
+    where user_id = #{userId,jdbcType=INTEGER}
   </select>
 </mapper>

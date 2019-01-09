@@ -8,6 +8,7 @@ import com.web.common.ResponseCode;
 import com.web.common.ServerResponse;
 import com.web.dao.CouponMapper;
 import com.web.pojo.Coupon;
+import com.web.pojo.User;
 import com.web.service.ICouponService;
 import com.web.util.DateTimeUtil;
 import com.web.vo.CouponListVo;
@@ -49,10 +50,10 @@ public class CouponServiceImpl implements ICouponService{
 
     @Override
     // use mybatis page helper plugin
-    public ServerResponse<PageInfo> getCouponList(int pageNum, int pageSize) {
+    public ServerResponse<PageInfo> getCouponList(Integer userId, int pageNum, int pageSize) {
         // startPage--start
         PageHelper.startPage(pageNum, pageSize);
-        List<Coupon> list = couponMapper.selectList();
+        List<Coupon> list = couponMapper.selectListByUserId(userId);
         // how to request sql
         List<CouponListVo> couponListVos = Lists.newArrayList();
         for (Coupon couponItem : list) {

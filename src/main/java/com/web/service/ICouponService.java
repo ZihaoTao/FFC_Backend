@@ -9,5 +9,5 @@ import com.web.common.ServerResponse;
 public interface ICouponService {
     ServerResponse<String> addCoupon (Integer userId, String discount);
 
-    ServerResponse<PageInfo> getCouponList(int pageNum, int pageSize);
+    ServerResponse<PageInfo> getCouponList(Integer userId, int pageNum, int pageSize);
 }

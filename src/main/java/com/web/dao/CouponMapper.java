@@ -20,5 +20,5 @@ public interface CouponMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    List<Coupon> selectList();
+    List<Coupon> selectListByUserId(Integer id);
 }
