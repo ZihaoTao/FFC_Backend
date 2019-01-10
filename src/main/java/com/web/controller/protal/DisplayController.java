@@ -1,10 +1,7 @@
 package com.web.controller.protal;
 
-import com.web.common.Const;
 import com.web.common.ServerResponse;
 import com.web.util.CookieUtil;
-import com.web.util.JsonUtil;
-import com.web.util.RedisShardedPoolUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,14 +20,13 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/display/")
 public class DisplayController {
 
-
+    private final static String CHECK = "FFC_CHECK";
 
     @RequestMapping(value = "setCookie.do",method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse setCookie(HttpSession session, HttpServletResponse httpServletResponse){
         ServerResponse response = ServerResponse.createBySuccess("Check first time visit");
         CookieUtil.writeCheckToken(httpServletResponse, session.getId());
-        RedisShardedPoolUtil.setEx(session.getId(), JsonUtil.obj2String(response.getData()), Const.RedisCacheEx.REDIS_SESSION_EXTIME);
         return response;
     }
 
