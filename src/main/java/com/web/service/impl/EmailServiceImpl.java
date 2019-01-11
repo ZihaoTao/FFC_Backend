@@ -43,6 +43,8 @@ public class EmailServiceImpl implements IEmailService {
         if(user == null) {
             return ServerResponse.createByErrorMessage("User does not exist");
         }
+
+        log.info("Send email to " + user.getEmail());
         Mail mail = new Mail();
         //主题
         mail.setSubject("Thank you for signing up!");
