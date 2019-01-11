@@ -10,6 +10,7 @@ import com.web.pojo.User;
 import com.web.service.IUserService;
 import com.web.util.DateTimeUtil;
 import com.web.util.MD5Util;
+import com.web.util.RedisShardedPoolUtil;
 import com.web.vo.UserListVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ public class UserServiceImpl implements IUserService {
 
     @Autowired
     private UserMapper userMapper;
+
 
     @Override
     public ServerResponse<User> login(String username, String password) {
@@ -55,7 +57,6 @@ public class UserServiceImpl implements IUserService {
             return validResponse;
         }
         user.setRole(Const.Role.ROLE_CUSTOMER);
-        user.setFirstTimeGetCoupon(Const.FirstTimeGetCoupon.YES);
         //MD5
         user.setPassword(MD5Util.MD5EncodeUtf8(user.getPassword()));
         int resultCount = userMapper.insert(user);
@@ -87,6 +88,78 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    public ServerResponse selectQuestion(String username){
+
+        ServerResponse validResponse = this.checkValid(username,Const.USERNAME);
+        if(validResponse.isSuccess()){
+            //User does not exist
+            return ServerResponse.createByErrorMessage("User does not exist");
+        }
+        String question = userMapper.selectQuestionByUsername(username);
+        if(org.apache.commons.lang3.StringUtils.isNotBlank(question)){
+            return ServerResponse.createBySuccess(question);
+        }
+        return ServerResponse.createByErrorMessage("Question is blank");
+    }
+
+    @Override
+    public ServerResponse<String> checkAnswer(String username,String question,String answer){
+        int resultCount = userMapper.checkAnswer(username,question,answer);
+        if(resultCount>0){
+            String forgetToken = UUID.randomUUID().toString();
+            RedisShardedPoolUtil.setEx(Const.TOKEN_PREFIX+username,forgetToken, Const.RedisCacheEx.REDIS_SESSION_EXTIME_TOKEN);
+            return ServerResponse.createBySuccess(forgetToken);
+        }
+        return ServerResponse.createByErrorMessage("Answer is incorrect or username does not exist");
+    }
+
+    @Override
+    public ServerResponse<String> forgetResetPassword(String username,String passwordNew,String forgetToken){
+        if(org.apache.commons.lang3.StringUtils.isBlank(forgetToken)){
+            return ServerResponse.createByErrorMessage("Wrong index,need token");
+        }
+        ServerResponse validResponse = this.checkValid(username,Const.USERNAME);
+        if(validResponse.isSuccess()){
+            return ServerResponse.createByErrorMessage("User does not exist");
+        }
+        String token = RedisShardedPoolUtil.get(Const.TOKEN_PREFIX+username);
+        if(org.apache.commons.lang3.StringUtils.isBlank(token)){
+            return ServerResponse.createByErrorMessage("Invalid or expired token");
+        }
+
+        if(org.apache.commons.lang3.StringUtils.equals(forgetToken,token)){
+            String md5Password  = MD5Util.MD5EncodeUtf8(passwordNew);
+            int rowCount = userMapper.updatePasswordByUsername(username,md5Password);
+
+            if(rowCount > 0){
+                return ServerResponse.createBySuccessMessage("Password has been changed successfully");
+            }
+        }else{
+            return ServerResponse.createByErrorMessage("Wrong token, please get a new token");
+        }
+        return ServerResponse.createByErrorMessage("Password reset failed");
+    }
+
+    @Override
+    public ServerResponse<String> resetPassword(String passwordOld,String passwordNew,User user){
+        int resultCount = userMapper.checkPassword(MD5Util.MD5EncodeUtf8(passwordOld),user.getId());
+        if(resultCount == 0){
+            return ServerResponse.createByErrorMessage("Incorrect old password");
+        }
+
+        if(org.apache.commons.lang3.StringUtils.equals(passwordNew, passwordOld)) {
+            return ServerResponse.createByErrorMessage("New password cannot be your old password");
+        }
+
+        user.setPassword(MD5Util.MD5EncodeUtf8(passwordNew));
+        int updateCount = userMapper.updateByPrimaryKeySelective(user);
+        if(updateCount > 0){
+            return ServerResponse.createBySuccessMessage("Password has been changed successfully");
+        }
+        return ServerResponse.createByErrorMessage("Password reset failed");
+    }
+
+    @Override
     public ServerResponse<User> updateInformation(User user){
         int resultCount = userMapper.checkEmailByUserId(user.getEmail(),user.getId());
         if(resultCount > 0){
@@ -98,7 +171,6 @@ public class UserServiceImpl implements IUserService {
         updateUser.setPhone(user.getPhone());
         updateUser.setQuestion(user.getQuestion());
         updateUser.setAnswer(user.getAnswer());
-        updateUser.setFirstTimeGetCoupon(user.getFirstTimeGetCoupon());
 
         int updateCount = userMapper.updateByPrimaryKeySelective(updateUser);
         if(updateCount > 0){
@@ -107,4 +179,65 @@ public class UserServiceImpl implements IUserService {
         return ServerResponse.createByErrorMessage("Information reset failed");
     }
 
+    @Override
+    public ServerResponse<User> getInformation(Integer userId){
+        User user = userMapper.selectByPrimaryKey(userId);
+        if(user == null){
+            return ServerResponse.createByErrorMessage("Cannot find the user");
+        }
+        user.setPassword(org.apache.commons.lang3.StringUtils.EMPTY);
+        return ServerResponse.createBySuccess(user);
+
+    }
+
+
+
+
+    //backend
+
+    /**
+     * Check if the user is administrator
+     * @param user
+     * @return
+     */
+    @Override
+    public ServerResponse checkAdminRole(User user){
+        if(user != null && user.getRole().intValue() == Const.Role.ROLE_ADMIN){
+            return ServerResponse.createBySuccess();
+        }
+        return ServerResponse.createByError();
+    }
+
+    @Override
+    public ServerResponse getUserNumber() {
+        int updateCount = userMapper.checkUserNumber();
+        return ServerResponse.createBySuccess(updateCount);
+    }
+
+    @Override
+    // use mybatis page helper plugin
+    public ServerResponse<PageInfo> getUserList(int pageNum, int pageSize) {
+        // startPage--start
+        PageHelper.startPage(pageNum, pageSize);
+        List<User> list = userMapper.selectList();
+        // how to request sql
+        List<UserListVo> userListVosList = Lists.newArrayList();
+        for (User userItem : list) {
+            userListVosList.add(assembleUserListVo(userItem));
+        }
+        // pageHelper ending
+        PageInfo pageResult = new PageInfo(list);
+        pageResult.setList(userListVosList);
+        return ServerResponse.createBySuccess(pageResult);
+    }
+
+    private UserListVo assembleUserListVo(User user) {
+        UserListVo userListVo = new UserListVo();
+        userListVo.setId(user.getId());
+        userListVo.setUsername(user.getUsername());
+        userListVo.setEmail(user.getEmail());
+        userListVo.setPhone(user.getPhone());
+        userListVo.setCreateTime(DateTimeUtil.dateToStr(user.getCreateTime()));
+        return userListVo;
+    }
 }

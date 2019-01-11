@@ -38,4 +38,6 @@ public interface UserMapper {
     int checkUserNumber();
 
     List<User> selectList();
+
+    User selectUserByUserName(String username);
 }

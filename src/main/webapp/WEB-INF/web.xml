@@ -24,7 +24,7 @@
   </filter-mapping>
 
 
-  <!--&lt;!&ndash; 二期新增重置session时间的filter &ndash;&gt;-->
+  <!-- 二期新增重置session时间的filter -->
   <filter>
     <filter-name>sessionExpireFilter</filter-name>
     <filter-class>com.web.controller.common.SessionExpireFilter</filter-class>

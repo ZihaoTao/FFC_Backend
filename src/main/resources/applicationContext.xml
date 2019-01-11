@@ -18,8 +18,7 @@
     <context:property-placeholder location="classpath:datasource.properties"/>
     <task:annotation-driven/>
 
-
-    <import resource="applicationContext-spring-session.xml"/>
     <import resource="applicationContext-datasource.xml"/>
+    <import resource="applicationContext-email.xml"/>
 
 </beans>

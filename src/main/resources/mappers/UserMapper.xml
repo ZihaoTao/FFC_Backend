@@ -182,6 +182,12 @@
     where username = #{username}
     and password = #{password}
   </select>
+  <select id="selectUserByUserName" resultMap="BaseResultMap" parameterType="string" >
+    select
+    <include refid="Base_Column_List" />
+    from FFC_user
+    where username = #{username}
+  </select>
 
 
   <select id="selectQuestionByUsername" resultType="string" parameterType="string">
