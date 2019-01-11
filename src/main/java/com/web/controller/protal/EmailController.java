@@ -30,4 +30,15 @@ public class EmailController {
         log.info("-------------SEND EMAIL END---------------");
         return iEmailService.emailManage(username);
     }
+
+    @RequestMapping(value = "confirm.do",method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse confirm(String username) {
+        log.info("-------------SEND EMAIL START---------------");
+        //写入excel
+        //insuranceService.excelManage();
+        //发邮件
+        log.info("-------------SEND EMAIL END---------------");
+        return iEmailService.confirm(username);
+    }
 }

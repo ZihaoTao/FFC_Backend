@@ -7,4 +7,5 @@ import com.web.common.ServerResponse;
  */
 public interface IEmailService {
     ServerResponse<String> emailManage(String username);
+    ServerResponse<String> confirm(String username);
 }

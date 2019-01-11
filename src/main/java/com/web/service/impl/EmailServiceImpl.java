@@ -75,6 +75,41 @@ public class EmailServiceImpl implements IEmailService {
         return sendEmail(mail);
     }
 
+    @Override
+    public ServerResponse<String> confirm(String username){
+
+        if(StringUtils.isEmpty(username)) {
+            return ServerResponse.createByErrorMessage("Incorrect index");
+        }
+
+        User user = userMapper.selectUserByUserName(username);
+        if(user == null) {
+            return ServerResponse.createByErrorMessage("User does not exist");
+        }
+
+        log.info("Send email to " + user.getEmail());
+        Mail mail = new Mail();
+        //主题
+        mail.setSubject("Thank you for signing up!");
+
+        //内容
+        StringBuilder builder = new StringBuilder();
+        builder.append("<html><body>Hi "+ username +", <br />");
+        builder.append("<br />");
+        builder.append("&nbsp&nbsp&nbsp&nbsp Your password has been successfully changed!<br />");
+        builder.append("<br />");
+        builder.append("Best,<br />");
+        builder.append("FashionForConservation Team<br />");
+
+        builder.append("</body></html>");
+        String content = builder.toString();
+
+        mail.setContent(content);
+        mail.setToEmails(user.getEmail());
+
+        return sendEmail(mail);
+    }
+
     private ServerResponse<String> sendEmail(Mail mail) {
         // 建立邮件消息
         MimeMessage message = javaMailSender.createMimeMessage();
