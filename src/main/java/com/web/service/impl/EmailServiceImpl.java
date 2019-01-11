@@ -1,24 +1,18 @@
 package com.web.service.impl;
 
-import com.sun.tools.internal.ws.wsdl.document.jaxws.Exception;
 import com.web.common.ServerResponse;
 import com.web.dao.UserMapper;
 import com.web.pojo.Mail;
 import com.web.pojo.User;
 import com.web.service.IEmailService;
-import com.web.service.IUserService;
-import com.web.util.PropertiesUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-
 import javax.annotation.Resource;
 import javax.mail.internet.MimeMessage;
-import java.io.File;
 import java.util.*;
 
 /**
