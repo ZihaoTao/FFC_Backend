@@ -6,6 +6,7 @@ import com.web.pojo.Mail;
 import com.web.pojo.User;
 import com.web.service.IEmailService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -33,7 +34,15 @@ public class EmailServiceImpl implements IEmailService {
 
     @Override
     public ServerResponse<String> emailManage(String username){
+
+        if(StringUtils.isEmpty(username)) {
+            return ServerResponse.createByErrorMessage("Incorrect index");
+        }
+
         User user = userMapper.selectUserByUserName(username);
+        if(user == null) {
+            return ServerResponse.createByErrorMessage("User does not exist");
+        }
         Mail mail = new Mail();
         //主题
         mail.setSubject("Thank you for signing up!");
