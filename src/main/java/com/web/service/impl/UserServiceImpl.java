@@ -59,6 +59,7 @@ public class UserServiceImpl implements IUserService {
         user.setRole(Const.Role.ROLE_CUSTOMER);
         //MD5
         user.setPassword(MD5Util.MD5EncodeUtf8(user.getPassword()));
+        user.setFirstTimeGetCoupon(Const.FirstTimeGetCoupon.YES);
         int resultCount = userMapper.insert(user);
         if(resultCount == 0){
             return ServerResponse.createByErrorMessage("Registration failed");

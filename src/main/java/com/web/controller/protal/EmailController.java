@@ -29,7 +29,5 @@ public class EmailController {
         //发邮件
         log.info("-------------SEND EMAIL END---------------");
         return iEmailService.emailManage(username);
-
-
     }
 }
