@@ -282,7 +282,6 @@
     SELECT
     <include refid="Base_Column_List"></include>
     from FFC_product
-    where status = 1
     <if test="productName != null">
       and name like #{productName}
     </if>
