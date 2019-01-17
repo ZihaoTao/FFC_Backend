@@ -17,21 +17,21 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from coupons
+    from FFC_coupons
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from coupons
+    delete from FFC_coupons
     where id = #{id,jdbcType=INTEGER}
   </delete>
 
   <insert id="insert" parameterType="com.web.pojo.Coupon" >
-    insert into coupons (id, user_id, status, discount, create_time, update_time)
+    insert into FFC_coupons (id, user_id, status, discount, create_time, update_time)
     values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{discount,jdbcType=VARCHAR}, now(), now())
   </insert>
 
   <insert id="insertSelective" parameterType="com.web.pojo.Coupon" >
-    insert into coupons
+    insert into FFC_coupons
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
@@ -74,7 +74,7 @@
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.web.pojo.Coupon" >
-    update coupons
+    update FFC_coupons
     <set >
       <if test="userId != null" >
         user_id = #{userId,jdbcType=INTEGER},
@@ -95,7 +95,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.web.pojo.Coupon" >
-    update coupons
+    update FFC_coupons
     set user_id = #{userId,jdbcType=INTEGER},
       status = #{status,jdbcType=INTEGER},
       discount = #{discount,jdbcType=VARCHAR},
@@ -107,7 +107,7 @@
   <select id="selectListByUserId" resultMap="BaseResultMap" parameterType="int">
     SELECT
     <include refid="Base_Column_List"/>
-    from coupons
+    from FFC_coupons
     where user_id = #{userId,jdbcType=INTEGER}
   </select>
 </mapper>
