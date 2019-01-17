@@ -57,7 +57,7 @@ public class CouponController {
         String userJsonStr = RedisShardedPoolUtil.get(loginToken);
         User currentUser = JsonUtil.String2Obj(userJsonStr, User.class);
         if(currentUser != null){
-            if(currentUser.getFirstTimeGetCoupon() == 0) {
+            if(currentUser.getFirstTimeGetCoupon() == Const.FirstTimeGetCoupon.YES) {
                 currentUser.setFirstTimeGetCoupon(Const.FirstTimeGetCoupon.NO);
                 iUserService.updateInformation(currentUser);
                 return iCouponService.addCoupon(currentUser.getId(), "10%");

@@ -172,7 +172,7 @@ public class UserServiceImpl implements IUserService {
         updateUser.setPhone(user.getPhone());
         updateUser.setQuestion(user.getQuestion());
         updateUser.setAnswer(user.getAnswer());
-
+        updateUser.setFirstTimeGetCoupon(user.getFirstTimeGetCoupon());
         int updateCount = userMapper.updateByPrimaryKeySelective(updateUser);
         if(updateCount > 0){
             return ServerResponse.createBySuccess("Information has been updated successfully",updateUser);
