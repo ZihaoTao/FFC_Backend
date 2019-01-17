@@ -45,13 +45,20 @@ public class Const {
         int USED = 2;
     }
 
+    public interface emailType {
+        Integer REGISTER_CONFIRMATION = 0;
+        Integer RESET_CONFIRMATION = 1;
+    }
+
     public interface FirstTimeGetCoupon{
         int YES = 0;
         int NO = 1;
     }
 
     public enum ProductStatusEnum{
-        ON_SALE(1,"ON SALE");
+        ON_SALE(1,"ON SALE"),
+        OFF_SALE(2,"OFF SALE"),
+        DELETED(3,"DELETED");
         private String value;
         private int code;
         ProductStatusEnum(int code,String value){

@@ -1,5 +1,6 @@
 package com.web.service.impl;
 
+import com.web.common.Const;
 import com.web.common.ServerResponse;
 import com.web.dao.UserMapper;
 import com.web.pojo.Mail;
@@ -33,9 +34,9 @@ public class EmailServiceImpl implements IEmailService {
     private SimpleMailMessage simpleMailMessage;
 
     @Override
-    public ServerResponse<String> emailManage(String username){
+    public ServerResponse<String> emailManage(String username, Integer emailType){
 
-        if(StringUtils.isEmpty(username)) {
+        if(StringUtils.isEmpty(username) || emailType == null) {
             return ServerResponse.createByErrorMessage("Incorrect index");
         }
 
@@ -47,61 +48,44 @@ public class EmailServiceImpl implements IEmailService {
         log.info("Send email to " + user.getEmail());
         Mail mail = new Mail();
         //主题
-        mail.setSubject("Thank you for signing up!");
 
         //内容
         StringBuilder builder = new StringBuilder();
-        builder.append("<html><body>Hi "+ username +", <br />");
+        if(emailType == Const.emailType.REGISTER_CONFIRMATION) {
+            mail.setSubject("Thank you for signing up!");
 
-        builder.append("<br />");
-        builder.append("&nbsp&nbsp&nbsp&nbsp Welcome to FashionForConservation!<br />");
-        builder.append("<br />");
-        builder.append("&nbsp&nbsp&nbsp&nbsp Username: "+ username +"<br />");
-        builder.append("&nbsp&nbsp&nbsp&nbsp Email: "+ user.getEmail() +"<br />");
-        builder.append("&nbsp&nbsp&nbsp&nbsp Security Question: "+ user.getQuestion() +"<br />");
-        builder.append("&nbsp&nbsp&nbsp&nbsp Security Answer: "+ user.getAnswer() +"<br />");
-        builder.append("<br />");
-        builder.append("&nbsp&nbsp&nbsp&nbsp Thank you for signing up!<br />");
-        builder.append("<br />");
-        builder.append("Best,<br />");
-        builder.append("FashionForConservation Team<br />");
+            builder.append("<html><body>Hi " + username + ", <br />");
 
-        builder.append("</body></html>");
-        String content = builder.toString();
+            builder.append("<br />");
+            builder.append("&nbsp&nbsp&nbsp&nbsp Welcome to FashionForConservation!<br />");
+            builder.append("<br />");
+            builder.append("&nbsp&nbsp&nbsp&nbsp Username: " + username + "<br />");
+            builder.append("&nbsp&nbsp&nbsp&nbsp Email: " + user.getEmail() + "<br />");
+            builder.append("&nbsp&nbsp&nbsp&nbsp Security Question: " + user.getQuestion() + "<br />");
+            builder.append("&nbsp&nbsp&nbsp&nbsp Security Answer: " + user.getAnswer() + "<br />");
+            builder.append("<br />");
+            builder.append("&nbsp&nbsp&nbsp&nbsp Thank you for signing up!<br />");
+            builder.append("<br />");
+            builder.append("Best,<br />");
+            builder.append("FashionForConservation Team<br />");
 
-        mail.setContent(content);
-        mail.setToEmails(user.getEmail());
+            builder.append("</body></html>");
 
-        return sendEmail(mail);
-    }
+        } else if(emailType == Const.emailType.RESET_CONFIRMATION) {
+            mail.setSubject("Your password is changed!");
 
-    @Override
-    public ServerResponse<String> confirm(String username){
+            builder.append("<html><body>Hi "+ username +", <br />");
+            builder.append("<br />");
+            builder.append("&nbsp&nbsp&nbsp&nbsp Your password has been successfully changed!<br />");
+            builder.append("<br />");
+            builder.append("Best,<br />");
+            builder.append("FashionForConservation Team<br />");
+            builder.append("</body></html>");
 
-        if(StringUtils.isEmpty(username)) {
-            return ServerResponse.createByErrorMessage("Incorrect index");
+        } else {
+            return ServerResponse.createByErrorMessage("Incorrect email type index");
         }
 
-        User user = userMapper.selectUserByUserName(username);
-        if(user == null) {
-            return ServerResponse.createByErrorMessage("User does not exist");
-        }
-
-        log.info("Send email to " + user.getEmail());
-        Mail mail = new Mail();
-        //主题
-        mail.setSubject("Thank you for signing up!");
-
-        //内容
-        StringBuilder builder = new StringBuilder();
-        builder.append("<html><body>Hi "+ username +", <br />");
-        builder.append("<br />");
-        builder.append("&nbsp&nbsp&nbsp&nbsp Your password has been successfully changed!<br />");
-        builder.append("<br />");
-        builder.append("Best,<br />");
-        builder.append("FashionForConservation Team<br />");
-
-        builder.append("</body></html>");
         String content = builder.toString();
 
         mail.setContent(content);

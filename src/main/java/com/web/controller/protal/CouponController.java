@@ -32,20 +32,20 @@ public class CouponController {
     @Autowired
     private IUserService iUserService;
 
-    @RequestMapping(value = "addCoupon.do",method = RequestMethod.POST)
-    @ResponseBody
-    public ServerResponse addCoupon(HttpServletRequest httpServletRequest, @RequestParam(value = "percent") int percent){
-        String loginToken = CookieUtil.readLoginToken(httpServletRequest);
-        if(StringUtils.isEmpty(loginToken)) {
-            return ServerResponse.createByErrorMessage("Need to login");
-        }
-        String userJsonStr = RedisShardedPoolUtil.get(loginToken);
-        User currentUser = JsonUtil.String2Obj(userJsonStr, User.class);
-        if(currentUser != null){
-            return iCouponService.addCoupon(currentUser.getId(), percent + "%");
-        }
-        return ServerResponse.createByErrorMessage("Need to login");
-    }
+//    @RequestMapping(value = "addCoupon.do",method = RequestMethod.POST)
+//    @ResponseBody
+//    public ServerResponse addCoupon(HttpServletRequest httpServletRequest, @RequestParam(value = "percent") int percent){
+//        String loginToken = CookieUtil.readLoginToken(httpServletRequest);
+//        if(StringUtils.isEmpty(loginToken)) {
+//            return ServerResponse.createByErrorMessage("Need to login");
+//        }
+//        String userJsonStr = RedisShardedPoolUtil.get(loginToken);
+//        User currentUser = JsonUtil.String2Obj(userJsonStr, User.class);
+//        if(currentUser != null){
+//            return iCouponService.addCoupon(currentUser.getId(), percent + "%");
+//        }
+//        return ServerResponse.createByErrorMessage("Need to login");
+//    }
 
     @RequestMapping(value = "addDefaultCoupon.do",method = RequestMethod.POST)
     @ResponseBody

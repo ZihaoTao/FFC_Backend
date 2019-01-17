@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -22,23 +23,13 @@ public class EmailController {
 
     @RequestMapping(value = "sendEmail.do",method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse sendEmailTask(String username) {
+    public ServerResponse sendEmailTask(@RequestParam(value = "username") String username, @RequestParam(value = "emailType") Integer emailType) {
         log.info("-------------SEND EMAIL START---------------");
         //写入excel
         //insuranceService.excelManage();
         //发邮件
         log.info("-------------SEND EMAIL END---------------");
-        return iEmailService.emailManage(username);
+        return iEmailService.emailManage(username, emailType);
     }
 
-    @RequestMapping(value = "confirm.do",method = RequestMethod.POST)
-    @ResponseBody
-    public ServerResponse confirm(String username) {
-        log.info("-------------SEND EMAIL START---------------");
-        //写入excel
-        //insuranceService.excelManage();
-        //发邮件
-        log.info("-------------SEND EMAIL END---------------");
-        return iEmailService.confirm(username);
-    }
 }
