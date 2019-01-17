@@ -282,7 +282,7 @@
     SELECT
     <include refid="Base_Column_List"></include>
     from FFC_product
-    where status = 1 OR status = 2
+    where status != 3
     <if test="productName != null">
       and name like #{productName}
     </if>
