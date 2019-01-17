@@ -232,4 +232,24 @@ public class ProductServiceImpl implements IProductService{
         pageInfo.setList(productListVoList);
         return ServerResponse.createBySuccess(pageInfo);
     }
+
+    @Override
+    public ServerResponse<PageInfo> getAllProduct(int pageNum, int pageSize, String orderBy) {
+        PageHelper.startPage(pageNum, pageSize);
+        // order by price
+        //PageHelper.orderBy("object OrderMethod")
+        if(Const.ProductListOrderBy.PRICE_ASC_DESC.contains(orderBy)) {
+            String[] orderByArray = orderBy.split("_");
+            PageHelper.orderBy(orderByArray[0] + " " + orderByArray[1]);
+        }
+        List<Product> list = productMapper.selectList();
+        List<ProductListVo> productListVoList = Lists.newArrayList();
+        for(Product listItem : list) {
+            ProductListVo productListVo = assembleProductListVo(listItem);
+            productListVoList.add(productListVo);
+        }
+        PageInfo pageInfo = new PageInfo(list);
+        pageInfo.setList(productListVoList);
+        return ServerResponse.createBySuccess(pageInfo);
+    }
 }
