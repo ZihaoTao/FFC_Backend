@@ -1,10 +1,8 @@
 package com.web.controller.protal;
 
 import com.google.gson.Gson;
-import com.web.common.ServerResponse;
 import com.web.service.IProductService;
 import com.web.service.impl.CategoryServiceImpl;
-import com.web.vo.ProductDetailVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +25,11 @@ public class ProductController {
 
     @RequestMapping("detail.do")
     @ResponseBody
-    public ServerResponse<ProductDetailVo> detail(Integer productId) {
-        return iProductService.getProductDetail(productId);
+    public String detail(@RequestParam("callback") String callback,
+                                                  @RequestParam("productId") Integer productId) {
+        Gson gson=new Gson();
+        logger.info(callback);
+        return callback+ "(" + gson.toJson(iProductService.getProductDetail(productId)) + ")" ;
     }
 
     @RequestMapping("list.do")
