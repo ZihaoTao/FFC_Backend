@@ -36,14 +36,6 @@ public class EventController {
         return callback+ "(" + gson.toJson(iEventService.upcomingEvents(new Date())) + ")" ;
     }
 
-    @RequestMapping("save.do")
-    @ResponseBody
-    public String productSave(Event event, @RequestParam("callback") String callback) {
-        Gson gson=new Gson();
-        logger.info(callback);
-        return callback+ "(" + gson.toJson(iEventService.saveOrUpdateEvent(event)) + ")" ;
-    }
-
     @RequestMapping("list.do")
     @ResponseBody
     public String getList(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
