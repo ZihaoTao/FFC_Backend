@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.web.dao.EventMapper" >
+    <resultMap id="BaseResultMap" type="com.web.pojo.Event" >
+        <constructor >
+            <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+            <arg column="category_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+            <arg column="name" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="subtitle" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="main_image" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="sub_images" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="detail" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="event_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+            <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+            <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+        </constructor>
+    </resultMap>
+    <sql id="Base_Column_List" >
+    id, category_id, name, subtitle, main_image, sub_images, detail, event_time, create_time, update_time
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select
+        <include refid="Base_Column_List" />
+        from FFC_event
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from FFC_event
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.web.pojo.Event" >
+    insert into FFC_event (id, category_id, name,
+      subtitle, main_image, sub_images, detail, event_time, create_time, update_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{categoryId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
+      #{subtitle,jdbcType=VARCHAR}, #{mainImage,jdbcType=VARCHAR}, #{subImages,jdbcType=VARCHAR},
+      #{detail,jdbcType=VARCHAR}, #{time,jdbcType=TIMESTAMP}, now(), now()
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.web.pojo.Event" >
+        insert into FFC_event
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="categoryId != null" >
+                category_id,
+            </if>
+            <if test="name != null" >
+                name,
+            </if>
+            <if test="subtitle != null" >
+                subtitle,
+            </if>
+            <if test="mainImage != null" >
+                main_image,
+            </if>
+            <if test="subImages != null" >
+                sub_images,
+            </if>
+            <if test="detail != null" >
+                detail,
+            </if>
+            <if test="time != null" >
+                event_time,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="updateTime != null" >
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="categoryId != null" >
+                #{categoryId,jdbcType=INTEGER},
+            </if>
+            <if test="name != null" >
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="subtitle != null" >
+                #{subtitle,jdbcType=VARCHAR},
+            </if>
+            <if test="mainImage != null" >
+                #{mainImage,jdbcType=VARCHAR},
+            </if>
+            <if test="subImages != null" >
+                #{subImages,jdbcType=VARCHAR},
+            </if>
+            <if test="detail != null" >
+                #{detail,jdbcType=VARCHAR},
+            </if>
+            <if test="time != null" >
+                #{time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null" >
+                now(),
+            </if>
+            <if test="updateTime != null" >
+                now(),
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.web.pojo.Event" >
+        update FFC_event
+        <set >
+            <if test="categoryId != null" >
+                category_id = #{categoryId,jdbcType=INTEGER},
+            </if>
+            <if test="name != null" >
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="subtitle != null" >
+                subtitle = #{subtitle,jdbcType=VARCHAR},
+            </if>
+            <if test="mainImage != null" >
+                main_image = #{mainImage,jdbcType=VARCHAR},
+            </if>
+            <if test="subImages != null" >
+                sub_images = #{subImages,jdbcType=VARCHAR},
+            </if>
+            <if test="detail != null" >
+                detail = #{detail,jdbcType=VARCHAR},
+            </if>
+            <if test="time != null" >
+                event_time = #{time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null" >
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null" >
+                update_time = now(),
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.web.pojo.Event" >
+    update FFC_event
+    set category_id = #{categoryId,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      subtitle = #{subtitle,jdbcType=VARCHAR},
+      main_image = #{mainImage,jdbcType=VARCHAR},
+      sub_images = #{subImages,jdbcType=VARCHAR},
+      detail = #{detail,jdbcType=VARCHAR},
+      event_time = #{time,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = now()
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+    <select id="selectList" resultMap="BaseResultMap" >
+        SELECT
+        <include refid="Base_Column_List"/>
+        from FFC_event
+        ORDER BY id asc
+    </select>
+
+
+    <select id="selectByNameAndEventId" resultMap="BaseResultMap" parameterType="map">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from FFC_event
+        <where>
+            <if test="eventName != null">
+                and name like #{eventName}
+            </if>
+            <if test="eventId != null">
+                and id = #{eventId}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectByNameAndCategoryId" resultMap="BaseResultMap" parameterType="map">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from FFC_event
+        <where>
+            <if test="eventName != null">
+                and name like #{eventName}
+            </if>
+            <if test="categoryId != null" >
+                and category_id = #{categoryId}
+            </if>
+        </where>
+    </select>
+
+    <select id="upcomingEvents" resultMap="BaseResultMap" parameterType="date">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from FFC_event
+        where DATE_FORMAT(event_time,'%Y%m%d') &gt;= DATE_FORMAT(#{time},'%Y%m%d')
+    </select>
+</mapper>
