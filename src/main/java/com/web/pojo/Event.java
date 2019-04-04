@@ -22,7 +22,9 @@ public class Event {
 
     private String mainImage;
 
-    private String subImages;
+    private String imageHost;
+
+    private String url;
 
     private String detail;
 

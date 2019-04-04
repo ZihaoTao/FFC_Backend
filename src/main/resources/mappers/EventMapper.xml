@@ -8,7 +8,8 @@
             <arg column="name" jdbcType="VARCHAR" javaType="java.lang.String" />
             <arg column="subtitle" jdbcType="VARCHAR" javaType="java.lang.String" />
             <arg column="main_image" jdbcType="VARCHAR" javaType="java.lang.String" />
-            <arg column="sub_images" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="image_host" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="url" jdbcType="VARCHAR" javaType="java.lang.String" />
             <arg column="detail" jdbcType="VARCHAR" javaType="java.lang.String" />
             <arg column="event_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
             <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
@@ -16,7 +17,7 @@
         </constructor>
     </resultMap>
     <sql id="Base_Column_List" >
-    id, category_id, name, subtitle, main_image, sub_images, detail, event_time, create_time, update_time
+    id, category_id, name, subtitle, main_image, image_host, url, detail, event_time, create_time, update_time
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
         select
@@ -30,10 +31,10 @@
   </delete>
     <insert id="insert" parameterType="com.web.pojo.Event" >
     insert into FFC_event (id, category_id, name,
-      subtitle, main_image, sub_images, detail, event_time, create_time, update_time
+      subtitle, main_image, image_host, url, detail, event_time, create_time, update_time
       )
     values (#{id,jdbcType=INTEGER}, #{categoryId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
-      #{subtitle,jdbcType=VARCHAR}, #{mainImage,jdbcType=VARCHAR}, #{subImages,jdbcType=VARCHAR},
+      #{subtitle,jdbcType=VARCHAR}, #{mainImage,jdbcType=VARCHAR}, #{imageHost,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR},
       #{detail,jdbcType=VARCHAR}, #{time,jdbcType=TIMESTAMP}, now(), now()
       )
   </insert>
@@ -55,8 +56,11 @@
             <if test="mainImage != null" >
                 main_image,
             </if>
-            <if test="subImages != null" >
-                sub_images,
+            <if test="imageHost != null" >
+                image_host,
+            </if>
+            <if test="url != null" >
+                url,
             </if>
             <if test="detail != null" >
                 detail,
@@ -87,8 +91,11 @@
             <if test="mainImage != null" >
                 #{mainImage,jdbcType=VARCHAR},
             </if>
-            <if test="subImages != null" >
-                #{subImages,jdbcType=VARCHAR},
+            <if test="imageHost != null" >
+                #{image_host,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null" >
+                #{url,jdbcType=VARCHAR},
             </if>
             <if test="detail != null" >
                 #{detail,jdbcType=VARCHAR},
@@ -119,8 +126,11 @@
             <if test="mainImage != null" >
                 main_image = #{mainImage,jdbcType=VARCHAR},
             </if>
-            <if test="subImages != null" >
-                sub_images = #{subImages,jdbcType=VARCHAR},
+            <if test="imageHost != null" >
+                image_host = #{imageHost,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null" >
+                url = #{url,jdbcType=VARCHAR},
             </if>
             <if test="detail != null" >
                 detail = #{detail,jdbcType=VARCHAR},
@@ -143,7 +153,8 @@
       name = #{name,jdbcType=VARCHAR},
       subtitle = #{subtitle,jdbcType=VARCHAR},
       main_image = #{mainImage,jdbcType=VARCHAR},
-      sub_images = #{subImages,jdbcType=VARCHAR},
+      image_host = #{imageHost,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
       detail = #{detail,jdbcType=VARCHAR},
       event_time = #{time,jdbcType=TIMESTAMP},
       create_time = #{createTime,jdbcType=TIMESTAMP},

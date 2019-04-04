@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -40,16 +39,12 @@ public class EventServiceImpl implements IEventService {
     @Override
     public ServerResponse saveOrUpdateEvent(Event event) {
         if (event != null) {
-            if(StringUtils.isNotBlank(event.getSubImages())) {
-                String[] subImageArray = event.getSubImages().split(",");
-                if(subImageArray.length > 0) event.setMainImage(subImageArray[0]);
-                if(event.getId() != null) {
-                    int rowCount = eventMapper.updateByPrimaryKey(event);
-                    if (rowCount > 0) {
-                        return ServerResponse.createBySuccess("Event updated successfully");
-                    } else {
-                        return ServerResponse.createByErrorMessage("Cannot updated event");
-                    }
+            if(event.getId() != null) {
+                int rowCount = eventMapper.updateByPrimaryKey(event);
+                if (rowCount > 0) {
+                    return ServerResponse.createBySuccess("Event updated successfully");
+                } else {
+                    return ServerResponse.createByErrorMessage("Cannot updated event");
                 }
             } else {
                 int rowCount = eventMapper.insert(event);
@@ -76,7 +71,6 @@ public class EventServiceImpl implements IEventService {
         if(StringUtils.isBlank(eventName) && categoryId == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), ResponseCode.ILLEGAL_ARGUMENT.getDesc());
         }
-        List<Integer> categoryIdList = new ArrayList<>();
         if(categoryId != null && StringUtils.isBlank(eventName)) {
             // this is not an error, should return a blank list
             PageHelper.startPage(pageNum, pageSize);
