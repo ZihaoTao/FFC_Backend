@@ -186,6 +186,7 @@
                 and category_id = #{categoryId}
             </if>
         </where>
+        ORDER BY event_time desc
     </select>
 
     <select id="upcomingEvents" resultMap="BaseResultMap" parameterType="date">

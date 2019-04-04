@@ -1,5 +1,7 @@
 package com.web.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.web.common.ResponseCode;
 import com.web.common.ServerResponse;
 import com.web.dao.EventMapper;
@@ -13,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -61,17 +64,32 @@ public class EventServiceImpl implements IEventService {
     }
 
     @Override
-    public ServerResponse<List<Event>> getEventList() {
+    public ServerResponse<PageInfo> getEventList(int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
         List<Event> list = eventMapper.selectList();
-        return ServerResponse.createBySuccess(list);
+        PageInfo pageResult = new PageInfo(list);
+        return ServerResponse.createBySuccess(pageResult);
     }
 
     @Override
-    public ServerResponse<List<Event>> getEventsByKeywordCategory(String eventName, Integer categoryId) {
+    public ServerResponse<PageInfo> getEventsByKeywordCategory(String eventName, Integer categoryId, int pageNum, int pageSize) {
         if(StringUtils.isBlank(eventName) && categoryId == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), ResponseCode.ILLEGAL_ARGUMENT.getDesc());
         }
-
-        return ServerResponse.createBySuccess(eventMapper.selectByNameAndCategoryId(eventName, categoryId));
+        List<Integer> categoryIdList = new ArrayList<>();
+        if(categoryId != null && StringUtils.isBlank(eventName)) {
+            // this is not an error, should return a blank list
+            PageHelper.startPage(pageNum, pageSize);
+            List<Event> list = eventMapper.selectList();
+            PageInfo pageResult = new PageInfo(list);
+            return ServerResponse.createBySuccess(pageResult);
+        }
+        if(StringUtils.isNotBlank(eventName)) {
+            eventName = '%' + eventName + '%';
+        }
+        PageHelper.startPage(pageNum, pageSize);
+        List<Event> list = eventMapper.selectByNameAndCategoryId(StringUtils.isBlank(eventName) ? null:eventName, categoryId);
+        PageInfo pageInfo = new PageInfo(list);
+        return ServerResponse.createBySuccess(pageInfo);
     }
 }

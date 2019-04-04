@@ -1,5 +1,6 @@
 package com.web.service;
 
+import com.github.pagehelper.PageInfo;
 import com.web.common.ServerResponse;
 import com.web.pojo.Event;
 
@@ -11,8 +12,8 @@ public interface IEventService {
 
     ServerResponse saveOrUpdateEvent(Event event);
 
-    ServerResponse<List<Event>> getEventList();
+    ServerResponse<PageInfo> getEventList(int pageNum, int pageSize);
 
-    ServerResponse<List<Event>> getEventsByKeywordCategory(String eventName, Integer categoryId);
+    ServerResponse<PageInfo> getEventsByKeywordCategory(String eventName, Integer categoryId, int pageNum, int pageSize);
 
 }

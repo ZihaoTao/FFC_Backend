@@ -46,18 +46,23 @@ public class EventController {
 
     @RequestMapping("list.do")
     @ResponseBody
-    public String getList(@RequestParam("callback") String callback) {
+    public String getList(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+                          @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+                          @RequestParam("callback") String callback) {
         Gson gson=new Gson();
         logger.info(callback);
-        return callback+ "(" + gson.toJson(iEventService.getEventList()) + ")" ;
+        return callback+ "(" + gson.toJson(iEventService.getEventList(pageNum, pageSize)) + ")" ;
     }
 
     @RequestMapping("CategoryList.do")
     @ResponseBody
-    public String getListByCategoryId(String eventName, Integer categoryId, @RequestParam("callback") String callback) {
+    public String getListByCategoryId(String eventName, Integer categoryId,
+                                      @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+                                      @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+                                      @RequestParam("callback") String callback) {
         Gson gson=new Gson();
         logger.info(callback);
-        return callback+ "(" + gson.toJson(iEventService.getEventsByKeywordCategory(eventName, categoryId)) + ")" ;
+        return callback+ "(" + gson.toJson(iEventService.getEventsByKeywordCategory(eventName, categoryId, pageNum, pageSize)) + ")" ;
     }
 
     @RequestMapping(value = "save.do", method = RequestMethod.POST)
