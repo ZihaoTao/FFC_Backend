@@ -16,12 +16,5 @@ rich text file upload
     <input type="submit" value="rich text file upload" />
 </form>
 
-login
-<form name="form3" action="/user/login.do" method="post" enctype="multipart/form-data">
-    username: <input type="text" name="username" />
-    password: <input type="password" name="password" />
-    <input type="submit" value="login" />
-</form>
-
 </body>
 </html>

@@ -81,7 +81,7 @@ public class AuthorityInterceptor implements HandlerInterceptor {
                     resultMap.put("msg","Need to log in admin");
                     out.print(JsonUtil.obj2String(resultMap));
                 }else{
-                    out.print(JsonUtil.obj2String(ServerResponse.createByErrorMessage("Interceptor, need to login" + loginToken)));
+                    out.print(JsonUtil.obj2String(ServerResponse.createByErrorMessage("Interceptor, need to login")));
                 }
             }else{
                 if(StringUtils.equals(className,"ProductManageController") && StringUtils.equals(methodName,"richtextImgUpload")){
